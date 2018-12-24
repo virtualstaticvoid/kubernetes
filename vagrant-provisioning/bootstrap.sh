@@ -64,14 +64,15 @@ echo "[TASK 10] Enable and start kubelet service"
 systemctl enable kubelet >/dev/null 2>&1
 systemctl start kubelet >/dev/null 2>&1
 
-# Enable ssh password authentication
-echo "[TASK 11] Enable ssh password authentication"
-sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-systemctl reload sshd
+# Add public key to authorised keys for direct SSH connections (i.e. not via vagrant ssh)
+# NB: add an corresponding entry to `~/.ssh/config` on your host machine
+echo "[TASK 11] Add SSH public key to authorised keys (for root)"
+mkdir -p $HOME/.ssh
+cat /vagrant/id_rsa.pub >> $HOME/.ssh/authorized_keys
+chmod 600 $HOME/.ssh/authorized_keys
 
-# Set Root password
-echo "[TASK 12] Set root password"
-echo "kubeadmin" | passwd --stdin root >/dev/null 2>&1
+echo "[TASK 12] Add SSH public key to authorised keys (for vagrant)"
+cat /vagrant/id_rsa.pub >> /home/vagrant/.ssh/authorized_keys
 
 # Update vagrant user's bashrc file
 echo "export TERM=xterm" >> /etc/bashrc

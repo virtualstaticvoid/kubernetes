@@ -15,5 +15,5 @@ echo "[TASK 3] Deploy flannel network"
 su - vagrant -c "kubectl create -f /vagrant/kube-flannel.yml"
 
 # Generate Cluster join command
-echo "[TASK 4] Generate and save cluster join command to /joincluster.sh"
-kubeadm token create --print-join-command > /joincluster.sh
+echo "[TASK 4] Generate and save cluster join command to joincluster.sh"
+kubeadm token create --print-join-command > $HOME/joincluster.sh
